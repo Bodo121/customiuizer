@@ -21,7 +21,7 @@ jobs:
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
-          java-version: '17'
+          java-version: '21'
       - name: Prepare dummy signing config for Gradle configuration
         run: |
           keytool -genkeypair -v -keystore "$GITHUB_WORKSPACE/../ci-debug.keystore" -storepass ci-debug-password -alias ci-debug -keypass ci-debug-password -keyalg RSA -keysize 2048 -validity 3650 -dname "CN=CI Debug,O=Customiuizer,C=US"
@@ -31,6 +31,8 @@ jobs:
           keyAlias=ci-debug
           keyPassword=ci-debug-password
           EOF
+      - name: Install Android SDK 36
+        run: yes | sdkmanager "platforms;android-36" "build-tools;36.0.0"
       - name: Build debug APK
         run: ./gradlew --no-daemon assembleDebug
       - uses: actions/upload-artifact@v4
