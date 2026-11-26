@@ -52,10 +52,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import io.github.libxposed.api.XposedInterface;
-import name.monwf.customiuizer.mods.utils.HookerClassHelper.CustomHooker;
+import name.monwf.customiuizer.mods.utils.HookerClassHelper;
 import name.monwf.customiuizer.mods.utils.HookerClassHelper.CustomMethodUnhooker;
-import name.monwf.customiuizer.mods.utils.HookerClassHelper.HighestPriorityHooker;
-import name.monwf.customiuizer.mods.utils.HookerClassHelper.LowestPriorityHooker;
 import name.monwf.customiuizer.mods.utils.HookerClassHelper.MethodHook;
 
 
@@ -737,59 +735,11 @@ public final class XposedHelpers {
     }
 
     public static CustomMethodUnhooker doHookMethod(Method m, MethodHook hook) {
-        CustomMethodUnhooker unhooker;
-        boolean hooked;
-        if (hook.mPriority > XposedInterface.PRIORITY_DEFAULT) {
-            hooked = HighestPriorityHooker.memberIsRegistered(m);
-            unhooker = HighestPriorityHooker.addCallback(m, hook);
-            if (!hooked) {
-                moduleInst.hook(m, HighestPriorityHooker.class);
-            }
-        }
-        else if (hook.mPriority < XposedInterface.PRIORITY_DEFAULT) {
-            hooked = LowestPriorityHooker.memberIsRegistered(m);
-            unhooker = LowestPriorityHooker.addCallback(m, hook);
-            if (!hooked) {
-                moduleInst.hook(m, LowestPriorityHooker.class);
-            }
-        }
-        else {
-            hooked = CustomHooker.memberIsRegistered(m);
-            unhooker = CustomHooker.addCallback(m, hook);
-            if (!hooked) {
-                moduleInst.hook(m, CustomHooker.class);
-            }
-        }
-
-        return unhooker;
+        return HookerClassHelper.hook(m, hook);
     }
 
     private static CustomMethodUnhooker doHookConstructor(Constructor<?> m, MethodHook hook) {
-        CustomMethodUnhooker unhooker;
-        boolean hooked;
-        if (hook.mPriority > XposedInterface.PRIORITY_DEFAULT) {
-            hooked = HighestPriorityHooker.memberIsRegistered(m);
-            unhooker = HighestPriorityHooker.addCallback(m, hook);
-            if (!hooked) {
-                moduleInst.hook(m, HighestPriorityHooker.class);
-            }
-        }
-        else if (hook.mPriority < XposedInterface.PRIORITY_DEFAULT) {
-            hooked = LowestPriorityHooker.memberIsRegistered(m);
-            unhooker = LowestPriorityHooker.addCallback(m, hook);
-            if (!hooked) {
-                moduleInst.hook(m, LowestPriorityHooker.class);
-            }
-        }
-        else {
-            hooked = CustomHooker.memberIsRegistered(m);
-            unhooker = CustomHooker.addCallback(m, hook);
-            if (!hooked) {
-                moduleInst.hook(m, CustomHooker.class);
-            }
-        }
-
-        return unhooker;
+        return HookerClassHelper.hook(m, hook);
     }
 
 
