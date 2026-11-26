@@ -10,8 +10,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import io.github.libxposed.api.XposedInterface.BeforeHookCallback;
-import io.github.libxposed.api.XposedInterface.AfterHookCallback;
+import name.monwf.customiuizer.mods.utils.HookerClassHelper.BeforeHookCallback;
+import name.monwf.customiuizer.mods.utils.HookerClassHelper.AfterHookCallback;
 import name.monwf.customiuizer.mods.utils.HookerClassHelper.MethodHook;
 
 public class ResourceHooks {

@@ -28,7 +28,7 @@ android {
         minSdkVersion 34
         //noinspection OldTargetApi,ExpiredTargetSdkVersion
         targetSdkVersion 34
-        compileSdk 35
+        compileSdk 36
         versionCode lastVersion
         versionName lastVersionName
         resConfigs 'ru-rRU', 'zh-rCN', 'ja-rJP', 'vi-rVN', 'cs-rCZ', 'pt-rBR', 'tr-rTR', 'es-rES'
@@ -80,8 +80,8 @@ android {
 //        }
 //    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_21
+        targetCompatibility JavaVersion.VERSION_21
     }
     buildFeatures {
         buildConfig = true
@@ -97,10 +97,10 @@ android {
 dependencies {
     //    implementation "ch.acra:acra-core:$acraVersion"
 //    noinspection DifferentStdlibGradleVersion
-    compileOnly files('lib/api-100.aar')
+    compileOnly "io.github.libxposed:api:101.0.1"
     compileOnly files('lib/framework.jar')
 
-    implementation "io.github.libxposed:service:100-1.0.0"
+    implementation "io.github.libxposed:service:101.0.0"
     implementation "org.apache.commons:commons-lang3:3.15.0"
     implementation "androidx.preference:preference:1.2.1"
     implementation 'androidx.palette:palette:1.0.0'

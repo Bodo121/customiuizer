@@ -12,7 +12,6 @@ import androidx.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Map;
 
-import io.github.libxposed.api.XposedInterface;
 import io.github.libxposed.api.XposedModule;
 import io.github.libxposed.api.XposedModuleInterface;
 import name.monwf.customiuizer.mods.Controls;
@@ -22,6 +21,8 @@ import name.monwf.customiuizer.mods.PackagePermissions;
 import name.monwf.customiuizer.mods.System;
 import name.monwf.customiuizer.mods.SystemUI;
 import name.monwf.customiuizer.mods.Various;
+import name.monwf.customiuizer.mods.utils.HookerClassHelper.AfterHookCallback;
+import name.monwf.customiuizer.mods.utils.HookerClassHelper.BeforeHookCallback;
 import name.monwf.customiuizer.mods.utils.HookerClassHelper.MethodHook;
 import name.monwf.customiuizer.mods.utils.ModuleHelper;
 import name.monwf.customiuizer.mods.utils.ResourceHooks;
@@ -38,9 +39,15 @@ public class MainModule extends XposedModule {
 
     OnSharedPreferenceChangeListener mListener;
 
-    public MainModule(@NonNull XposedInterface base, @NonNull XposedModuleInterface.ModuleLoadedParam param) {
-        super(base, param);
+    public MainModule() {
+        super();
+    }
+
+    @Override
+    public void onModuleLoaded(@NonNull XposedModuleInterface.ModuleLoadedParam param) {
+        super.onModuleLoaded(param);
         processName = param.getProcessName();
+        XposedHelpers.moduleInst = this;
     }
 
     private void initPrefs() {
@@ -83,7 +90,7 @@ public class MainModule extends XposedModule {
     }
 
     @Override
-    public void onSystemServerLoaded(final SystemServerLoadedParam lpparam) {
+    public void onSystemServerStarting(final XposedModuleInterface.SystemServerStartingParam lpparam) {
         ModuleHelper.currentPackageName = "android";
         initPrefs();
         PackagePermissions.hook(lpparam);
@@ -162,8 +169,8 @@ public class MainModule extends XposedModule {
     }
 
     @Override
-    public void onPackageLoaded(final PackageLoadedParam lpparam) {
-        super.onPackageLoaded(lpparam);
+    public void onPackageReady(final XposedModuleInterface.PackageReadyParam lpparam) {
+        super.onPackageReady(lpparam);
         if (!lpparam.isFirstPackage()) return;
 
         String pkg = lpparam.getPackageName();
@@ -619,7 +626,7 @@ public class MainModule extends XposedModule {
         }
     }
 
-    private void handleLoadLauncher(final PackageLoadedParam lpparam) {
+    private void handleLoadLauncher(final XposedModuleInterface.PackageReadyParam lpparam) {
         boolean closeOnLaunch = false;
         if (mPrefs.getInt("launcher_swipedown_action", 1) != 1 ||
                 mPrefs.getInt("launcher_swipeup_action", 1) != 1 ||
