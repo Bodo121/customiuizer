@@ -239,7 +239,7 @@ public class ModuleHelper {
         return context;
     }
 
-    public static Context findContext(XposedModuleInterface.PackageLoadedParam lpparam) {
+    public static Context findContext(XposedModuleInterface.PackageReadyParam lpparam) {
         Context context = null;
         try {
             context = (Application)XposedHelpers.callStaticMethod(XposedHelpers.findClass("android.app.ActivityThread", lpparam.getClassLoader()), "currentApplication");
