@@ -141,9 +141,15 @@ public final class HookerClassHelper {
             throw new IllegalArgumentException("Only methods and constructors can be hooked");
         }
 
+        int priority = callback.mPriority > XposedInterface.PRIORITY_DEFAULT
+            ? XposedInterface.PRIORITY_HIGHEST
+            : callback.mPriority < XposedInterface.PRIORITY_DEFAULT
+                ? XposedInterface.PRIORITY_LOWEST
+                : XposedInterface.PRIORITY_DEFAULT;
+
         XposedInterface.HookHandle handle = XposedHelpers.moduleInst
             .hook((Executable) member)
-            .setPriority(callback.mPriority)
+            .setPriority(priority)
             .intercept(new XposedInterface.Hooker() {
                 @Override
                 public Object intercept(XposedInterface.Chain chain) throws Throwable {
