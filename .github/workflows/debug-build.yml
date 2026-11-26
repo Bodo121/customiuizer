@@ -9,6 +9,10 @@ on:
       - a14
   workflow_dispatch:
 
+concurrency:
+  group: customiuizer-a14-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
   build-debug:
     runs-on: ubuntu-latest
