@@ -178,7 +178,7 @@ public final class HookerClassHelper {
     /**
      * Skip the hooked method and return null, matching the old helper behavior.
      */
-    public static final MethodHook DO_NOTHING = new MethodHook(XposedInterface.PRIORITY_HIGHEST * 2) {
+    public static final MethodHook DO_NOTHING = new MethodHook(XposedInterface.PRIORITY_HIGHEST) {
         @Override
         protected void before(BeforeHookCallback callback) {
             callback.returnAndSkip(null);
