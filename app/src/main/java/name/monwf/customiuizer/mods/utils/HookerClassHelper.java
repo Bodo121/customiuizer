@@ -175,4 +175,30 @@ public final class HookerClassHelper {
 
         return handle::unhook;
     }
+    /**
+     * Skip the hooked method and return null, matching the old helper behavior.
+     */
+    public static final MethodHook DO_NOTHING = new MethodHook(XposedInterface.PRIORITY_HIGHEST * 2) {
+        @Override
+        protected void before(BeforeHookCallback callback) {
+            callback.returnAndSkip(null);
+        }
+    };
+
+    /**
+     * Create a hook that skips the original method and returns a constant value.
+     */
+    public static MethodHook returnConstant(Object result) {
+        return returnConstant(XposedInterface.PRIORITY_HIGHEST, result);
+    }
+
+    public static MethodHook returnConstant(int priority, Object result) {
+        return new MethodHook(priority) {
+            @Override
+            protected void before(BeforeHookCallback callback) {
+                callback.returnAndSkip(result);
+            }
+        };
+    }
+
 }
