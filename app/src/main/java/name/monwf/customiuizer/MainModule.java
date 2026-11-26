@@ -626,7 +626,7 @@ public class MainModule extends XposedModule {
         }
     }
 
-    private void handleLoadLauncher(final PackageLoadedParam lpparam) {
+    private void handleLoadLauncher(final XposedModuleInterface.PackageReadyParam lpparam) {
         boolean closeOnLaunch = false;
         if (mPrefs.getInt("launcher_swipedown_action", 1) != 1 ||
                 mPrefs.getInt("launcher_swipeup_action", 1) != 1 ||
