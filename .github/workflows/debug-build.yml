@@ -1,0 +1,36 @@
+name: Debug APK build (a14)
+
+on:
+  push:
+    branches:
+      - ci/debug-a14-build
+  pull_request:
+    branches:
+      - a14
+  workflow_dispatch:
+
+jobs:
+  build-debug:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: Prepare dummy signing config for Gradle configuration
+        run: |
+          keytool -genkeypair -v -keystore "$GITHUB_WORKSPACE/../ci-debug.keystore" -storepass ci-debug-password -alias ci-debug -keypass ci-debug-password -keyalg RSA -keysize 2048 -validity 3650 -dname "CN=CI Debug,O=Customiuizer,C=US"
+          cat > "$GITHUB_WORKSPACE/../keystore.properties" <<EOF
+          storeFile=$GITHUB_WORKSPACE/../ci-debug.keystore
+          storePassword=ci-debug-password
+          keyAlias=ci-debug
+          keyPassword=ci-debug-password
+          EOF
+      - name: Build debug APK
+        run: ./gradlew --no-daemon assembleDebug
+      - uses: actions/upload-artifact@v4
+        with:
+          name: customiuizer-a14-debug-apk
+          path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
